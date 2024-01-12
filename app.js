@@ -12,6 +12,9 @@ const qrc721Routes = require("./routes/qrc721");
 const NFTsRoutes = require("./routes/nfts");
 const ZonesRoutes = require("./routes/zones");
 
+// Schedule service
+const { qrc721services } = require("./services/qrc721services");
+
 const app = express();
 app.options("*", cors());
 app.use(cors());
@@ -69,5 +72,16 @@ app.use("", (req, _, next) => {
 app.use((err, _, res, __) =>
   res.status(err.status).json({ message: err.message })
 );
+
+let findQRC721;
+
+const executeSchedule = async () => {
+  await qrc721services();
+  findQRC721 = setInterval(() => {
+    qrc721services().catch(console.error);
+  }, 80000);
+};
+
+executeSchedule();
 
 module.exports = app;
