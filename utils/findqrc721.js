@@ -90,39 +90,13 @@ async function* findQRC721Contracts(startblock = 514930) {
           currentBlock++;
         } catch (error) {
           console.error(`Provider error for ${providerUrl}: ${error.message}`);
+          currentBlock++;
         }
       }
     }
   } catch (error) {
     logger.error("findNFTContracts encountered an error: ", error.message);
     return undefined;
-  }
-}
-
-async function getTransactionsInBatch(provider, startBlock, endBlock) {
-  const batch = [];
-  for (let blockNumber = startBlock; blockNumber <= endBlock; blockNumber++) {
-    const block = await provider.getBlockWithTransactions(Number(blockNumber));
-    batch.push(...block.transactions);
-  }
-  return batch;
-}
-
-async function updateLastProcessedBlock(serviceName, zoneId, blockNumber) {
-  let getLastProcessedBlocks = await LastProcessedBlock.findOne({
-    where: { serviceName, zoneId },
-  });
-  if (!getLastProcessedBlocks) {
-    await LastProcessedBlock.create({
-      serviceName: serviceName,
-      blockNumber: blockNumber,
-      zoneId: zoneId,
-    });
-  } else {
-    await getLastProcessedBlocks.update({
-      blockNumber: blockNumber,
-      zoneId: zoneId,
-    });
   }
 }
 
