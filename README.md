@@ -38,14 +38,14 @@ QRC721 API on Quai Network
 1. Development Server
 
    ```bash
-   npm install
+   npm run dev
 
    ```
 
 2. Production Server
 
    ```bash
-   npm start
+   npm run start
    ```
 
 ##
