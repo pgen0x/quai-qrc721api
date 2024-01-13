@@ -1,6 +1,9 @@
 const { LastProcessedBlock, Zones } = require("../models");
 const { quais } = require("quais");
 const log4js = require("../config/log4js");
+const { nftABI } = require("../constants/NFTAbi");
+const { QRC20ABI } = require("../constants/QRC20Abi");
+
 const logger = log4js.getLogger("utils/findqrc721.js");
 
 const zoneLocks = {};
@@ -8,16 +11,11 @@ const zoneLocks = {};
 async function* findQRC721Contracts(startblock = 514930, zone) {
   try {
     if (zoneLocks[zone.zoneId]) {
-      console.log(`Already processing for zone ${zone.zoneId}. Skipping.`);
+      logger.log(`Already processing for zone ${zone.zoneId}. Skipping.`);
       return;
     }
 
     zoneLocks[zone.zoneId] = true;
-
-    const QRC20_ABI = [
-      "function decimals() external view returns (uint8)",
-      "function totalSupply() external view returns (uint256)",
-    ];
 
     const serviceName = "findQRC721Contracts";
     let qrc721Contracts = [];
@@ -32,29 +30,25 @@ async function* findQRC721Contracts(startblock = 514930, zone) {
     let currentBlock = fromBlock;
     let latestBlock = await provider.getBlockNumber();
     logger.info("Find QRC721 for zone", zone.zoneId, "from ", currentBlock);
-    while (currentBlock <= latestBlock) {
+    while (Number(currentBlock) <= latestBlock) {
       try {
         const block = await provider.getBlockWithTransactions(
           Number(currentBlock)
         );
 
         for (const transaction of block.transactions) {
-          let contractAddress;
           if (transaction.to === null) {
             const txReceipt = await provider.getTransactionReceipt(
               transaction.hash
             );
-            contractAddress = txReceipt.contractAddress;
-            const contract = new quais.Contract(
-              contractAddress,
-              QRC20_ABI,
-              provider
-            );
+            const contractAddress = txReceipt.contractAddress;
 
-            try {
-              await contract.decimals();
-              logger.debug("QRC-20");
-            } catch (error) {
+            const isQRC20 = await isQRC20Contract(contractAddress, provider);
+            const isQRC721 = await isQRC721Contract(contractAddress, provider);
+            if (isQRC20) {
+              logger.debug(contractAddress, ": is QRC-20");
+            } else if (isQRC721) {
+              logger.debug(contractAddress, ": is QRC-721");
               qrc721Contracts.push({
                 contractAddress: contractAddress,
                 type: "QRC-721",
@@ -95,8 +89,7 @@ async function* findQRC721Contracts(startblock = 514930, zone) {
         // Move to the next block
         currentBlock++;
       } catch (error) {
-        console.error(`Provider error for ${providerUrl}: ${error.message}`);
-        currentBlock++;
+        logger.error(`Provider error for ${providerUrl}: ${error.message}`);
       }
     }
   } catch (error) {
@@ -122,8 +115,36 @@ async function getLatestProcessedBlock(serviceName, zoneId) {
       return null;
     }
   } catch (error) {
-    console.error("Error fetching the latest processed block:", error);
+    logger.error("Error fetching the latest processed block:", error);
     throw error;
+  }
+}
+
+async function isQRC20Contract(contractAddress, provider) {
+  const contract = new quais.Contract(contractAddress, QRC20ABI, provider);
+
+  try {
+    // Check if the contract has key QRC-20 functions
+    await Promise.all([
+      contract.decimals("0x0000000000000000000000000000000000000000"),
+    ]);
+
+    return true;
+  } catch (error) {
+    return false; // If any function call fails, it's not an QRC-20 contract
+  }
+}
+
+async function isQRC721Contract(contractAddress, provider) {
+  const contract = new quais.Contract(contractAddress, nftABI, provider);
+
+  try {
+    // Check if the contract has key QRC-721 functions
+    await Promise.all([contract.ownerOf(1)]);
+
+    return true; // If all functions are present, it's likely an QRC-721 contract
+  } catch (error) {
+    return false; // If any function call fails, it's not an QRC-721 contract
   }
 }
 
