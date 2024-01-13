@@ -14,6 +14,7 @@ const ZonesRoutes = require("./routes/zones");
 
 // Schedule service
 const { qrc721services } = require("./services/qrc721services");
+const { NFTServices } = require("./services/nftservices");
 
 const app = express();
 app.options("*", cors());
@@ -73,15 +74,11 @@ app.use((err, _, res, __) =>
   res.status(err.status).json({ message: err.message })
 );
 
-let findQRC721;
-
-const executeSchedule = async () => {
+const executeService = async () => {
   await qrc721services();
-  findQRC721 = setInterval(() => {
-    qrc721services().catch(console.error);
-  }, 80000);
+  await NFTServices();
 };
 
-executeSchedule();
+executeService();
 
 module.exports = app;
