@@ -12,7 +12,7 @@ const qrc721Routes = require("./routes/qrc721");
 const NFTsRoutes = require("./routes/nfts");
 const ZonesRoutes = require("./routes/zones");
 
-// Schedule service
+// Services
 const { qrc721services } = require("./services/qrc721services");
 const { NFTServices } = require("./services/nftservices");
 
@@ -75,8 +75,7 @@ app.use((err, _, res, __) =>
 );
 
 const executeService = async () => {
-  await qrc721services();
-  await NFTServices();
+  await Promise.all([qrc721services(), NFTServices()]);
 };
 
 executeService();
