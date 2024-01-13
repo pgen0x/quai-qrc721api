@@ -6,7 +6,6 @@ This section provides instructions on how to use Sequelize migrations to manage 
 
 - [Introduction to Migrations](#introduction-to-migrations)
 - [Installation](#installation)
-- [Data Structure](#data-structure)
 - [Creating a Migration](#creating-a-migration)
 - [Running Migrations](#running-migrations)
 - [Rolling Back Migrations](#rolling-back-migrations)
@@ -24,14 +23,6 @@ Make sure you have Sequelize installed in your project:
 npm install sequelize sequelize-cli
 
 ```
-
-## Data Structure
-
-We have documented the data structure for the project in a Google Sheets document. This data structure defines the layout and relationships of the various data entities in the project. It's an important reference for understanding how data is organized and stored in the application.
-
-You can access the data structure document here: [Data Structure Google Sheets](https://docs.google.com/spreadsheets/d/1PjDRNgVuseY0I0eppnjlDXyNMHf6X1PWQgubbd4_g_Q/edit#gid=0).
-
-Feel free to refer to this document when working with the project's database, models, and migrations.
 
 ## Creating a Migration
 
