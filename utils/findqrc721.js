@@ -90,6 +90,7 @@ async function* findQRC721Contracts(startblock = 514930, zone) {
         currentBlock++;
       } catch (error) {
         logger.error(`Provider error for ${providerUrl}: ${error.message}`);
+        currentBlock++;
       }
     }
   } catch (error) {
