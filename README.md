@@ -33,6 +33,11 @@ QRC721 API on Quai Network
    PORTTESTNET=3002
    ```
 
+## Migration
+
+This guide will walk you through the process of migrating your Sequelize application and seeding data using Sequelize CLI.
+Please check this [Migrations Documentation](https://github.com/pgen0x/quai-qrc721api/blob/main/MIGRATION.md)
+
 ## Running
 
 1. Development Server

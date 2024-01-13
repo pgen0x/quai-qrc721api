@@ -71,6 +71,29 @@ npx sequelize-cli db:migrate:undo:all
 
 ```
 
+## Seeding Data
+
+```bash
+npx sequelize-cli db:seed:all
+
+```
+
+This command will execute all seeders and populate your database with the specified data.
+
+## Rolling Back Seeds
+
+Undo the last seed:
+
+```bash
+npx sequelize-cli db:seed:undo
+```
+
+Undo all seeds:
+
+```bash
+npx sequelize-cli db:seed:undo:all
+```
+
 ## Additional Resources
 
 - [Sequelize Migrations Documentation](https://sequelize.org/docs/v6/other-topics/migrations/)
