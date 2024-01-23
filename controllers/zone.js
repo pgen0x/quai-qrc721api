@@ -1,6 +1,6 @@
 const { Zones } = require("../models");
 const log4js = require("../config/log4js");
-const logger = log4js.getLogger("controllers/nft.js");
+const logger = log4js.getLogger("controllers/zone.js");
 const { Op } = require("sequelize");
 
 exports.getAllZones = async (req, res) => {
