@@ -11,6 +11,7 @@ const { buildError } = require("express-ez-405");
 const qrc721Routes = require("./routes/qrc721");
 const NFTsRoutes = require("./routes/nfts");
 const ZonesRoutes = require("./routes/zones");
+const LastProcessedBlockRoutes = require("./routes/lastprocessedblocks");
 
 // Services
 const { qrc721services } = require("./services/qrc721services");
@@ -60,6 +61,7 @@ app.get(
 app.use("/api/qrc721", qrc721Routes);
 app.use("/api/nfts", NFTsRoutes);
 app.use("/api/zones", ZonesRoutes);
+app.use("/api/lastprocessedblock", LastProcessedBlockRoutes);
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 /// 405 & 404 error catcher

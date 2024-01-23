@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class LastProcessedBlock extends Model {
     /**
@@ -11,15 +9,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      LastProcessedBlock.belongsTo(models.Zones, { foreignKey: "zoneId" }); // Each NFT belongs to one Zone
     }
   }
-  LastProcessedBlock.init({
-    serviceName: DataTypes.STRING,
-    blockNumber: DataTypes.DECIMAL,
-    zoneId: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'LastProcessedBlock',
-  });
+  LastProcessedBlock.init(
+    {
+      serviceName: DataTypes.STRING,
+      blockNumber: DataTypes.DECIMAL,
+      zoneId: DataTypes.INTEGER,
+    },
+    {
+      sequelize,
+      modelName: "LastProcessedBlock",
+    }
+  );
   return LastProcessedBlock;
 };
