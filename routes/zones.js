@@ -3,6 +3,6 @@ const ZonesController = require("../controllers/zone");
 
 const router = express.Router();
 
-router.get("/all", ZonesController.getAllZones);
+router.get("/", ZonesController.getAllZones);
 
 module.exports = router;

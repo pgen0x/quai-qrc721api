@@ -3,6 +3,6 @@ const LastProcessedBlockController = require("../controllers/lastprocessedblock"
 
 const router = express.Router();
 
-router.get("/all", LastProcessedBlockController.getLastProcessedBlock);
+router.get("/", LastProcessedBlockController.getLastProcessedBlock);
 
 module.exports = router;
