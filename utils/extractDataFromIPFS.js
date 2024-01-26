@@ -2,6 +2,8 @@ const extractDataFromBase64 = require("./extractDataFromBase64");
 const extractIPFSHashWithFileName = require("./extractIPFSHash");
 const ipfsGateways = require("../config/ipfsGateway.json");
 const CID = require("cids");
+const log4js = require("../config/log4js");
+const logger = log4js.getLogger("utils/extractDataFromIPFS.js");
 
 async function extractDataFromIPFS(ipfsHashOrUrl) {
   try {
