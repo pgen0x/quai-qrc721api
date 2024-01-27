@@ -35,7 +35,7 @@ exports.getAllNFTs = async (req, res) => {
       include: [
         {
           model: QRC721s,
-          attributes: [],
+          attributes: ["name", "tokenSymbol"],
           include: [
             {
               model: Zones,
